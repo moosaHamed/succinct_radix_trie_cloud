@@ -1,0 +1,69 @@
+# Build every project, then run every test, on every push to main and every pull request
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+# Read-only token: this workflow never writes to the repository
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # Real PostgreSQL for the ingestion integration tests; no in-memory fake reproduces SequentialAccess
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: succinct
+          POSTGRES_PASSWORD: succinct
+          POSTGRES_DB: succinct
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U succinct"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      # Integration tests skip themselves when this variable is absent
+      SUCCINCT_PG: Host=localhost;Port=5432;Username=succinct;Password=succinct;Database=succinct
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore Succinct.sln
+
+      # Release build proves the shipping configuration compiles with warnings as errors
+      - name: Build (Release)
+        run: dotnet build Succinct.sln -c Release --no-restore
+
+      # Debug tests run with checked arithmetic, so a silent overflow becomes a failing test
+      - name: Test (Debug, checked arithmetic)
+        run: dotnet test Succinct.sln -c Debug --logger "trx" --results-directory TestResults
+
+      # Same core tests with BMI2 disabled, so the portable select-in-word path is exercised too
+      - name: Test core without BMI2
+        env:
+          DOTNET_EnableBMI2: 0
+        run: dotnet test tests/Succinct.Core.Tests/Succinct.Core.Tests.csproj -c Debug --no-build
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults
