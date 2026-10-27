@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Domain layer: schemaless store, snapshot publication, tenancy -->
+    <RootNamespace>Succinct.Catalog</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Builds on the succinct structures only; no framework dependency -->
+    <ProjectReference Include="..\Succinct.Core\Succinct.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Tests may use internal factories such as AttributeValue's raw constructor -->
+    <InternalsVisibleTo Include="Succinct.Catalog.Tests" />
+  </ItemGroup>
+
+</Project>
