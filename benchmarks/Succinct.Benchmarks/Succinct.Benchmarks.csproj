@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- BenchmarkDotNet runs as a console application -->
+    <OutputType>Exe</OutputType>
+    <!-- Analyzer findings from BenchmarkDotNet's own rules warn rather than fail -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <!-- Nullable warnings still fail the build -->
+    <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Succinct.Core\Succinct.Core.csproj" />
+    <ProjectReference Include="..\..\src\Succinct.Catalog\Succinct.Catalog.csproj" />
+  </ItemGroup>
+
+</Project>

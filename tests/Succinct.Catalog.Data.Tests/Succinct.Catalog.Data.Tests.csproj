@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Succinct.Catalog.Data\Succinct.Catalog.Data.csproj" />
+  </ItemGroup>
+
+</Project>
