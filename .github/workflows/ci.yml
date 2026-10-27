@@ -51,9 +51,21 @@ jobs:
       - name: Build (Release)
         run: dotnet build Succinct.sln -c Release --no-restore
 
-      # Debug tests run with checked arithmetic, so a silent overflow becomes a failing test
+      # Debug tests run with checked arithmetic, so a silent overflow becomes a failing test.
+      # One run per project, each with its own TRX file; every project runs even if an earlier one fails.
       - name: Test (Debug, checked arithmetic)
-        run: dotnet test Succinct.sln -c Debug --logger "trx" --results-directory TestResults
+        run: |
+          status=0
+          for project in tests/*/*.csproj; do
+            name=$(basename "$project" .csproj)
+            dotnet test "$project" -c Debug --logger "trx;LogFileName=$name.trx" --results-directory TestResults || status=1
+          done
+          exit $status
+
+      # Failed tests become annotations, readable from the checks API without the raw log
+      - name: Report failed tests
+        if: failure()
+        run: python3 .github/scripts/report_trx.py TestResults Succinct.Core.Tests Succinct.Catalog.Tests Succinct.Catalog.Data.Tests
 
       # Same core tests with BMI2 disabled, so the portable select-in-word path is exercised too
       - name: Test core without BMI2

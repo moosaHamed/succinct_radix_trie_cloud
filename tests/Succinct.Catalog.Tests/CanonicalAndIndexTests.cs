@@ -99,7 +99,8 @@ public sealed class RecordTreeRendererTests
                 Attr("name", AttributeValue.FromFreeText("Motor")),
                 Attr("dims.width", AttributeValue.FromFloat64(1.5)),
                 Attr("dims.height", AttributeValue.FromUInt32(2)),
-            ]),
+            ],
+            CultureInfo.InvariantCulture),
         ];
         TreeRow[] expected =
         [
