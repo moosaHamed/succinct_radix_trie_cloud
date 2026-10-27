@@ -1,0 +1,7 @@
+T:System.Runtime.CompilerServices.Unsafe;Memory-unsafe without the unsafe keyword
+T:System.Runtime.InteropServices.MemoryMarshal;Bypasses bounds checks; allowed only under an Interop folder with a written justification
+T:System.Runtime.InteropServices.CollectionsMarshal;Exposes collection internals that go stale when the collection resizes
+M:System.GC.AllocateUninitializedArray``1(System.Int32,System.Boolean);Reading before writing discloses old heap bytes; suppress only with a proof that every element is written first
+P:System.Threading.Tasks.Task`1.Result;Sync over async starves the thread pool: await instead
+M:System.Threading.Tasks.Task.Wait;Sync over async starves the thread pool: await instead
+M:System.Threading.Tasks.Task.WaitAll(System.Threading.Tasks.Task[]);Sync over async starves the thread pool: await Task.WhenAll instead

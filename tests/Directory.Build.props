@@ -1,0 +1,28 @@
+<Project>
+
+  <!-- Inherit the repository-wide settings first -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <!-- Test-analyzer style findings (xUnit2xxx) warn instead of failing the build -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <!-- Nullable warnings still fail the build in test code -->
+    <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Test host, framework and runner, versions from Directory.Packages.props -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Every test file sees Fact, Theory and Assert without a using line -->
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

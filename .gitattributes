@@ -7,3 +7,6 @@
 *.props text eol=lf
 *.md text eol=lf
 *.yml text eol=lf
+
+# Visual Studio expects CRLF in solution files
+*.sln text eol=crlf

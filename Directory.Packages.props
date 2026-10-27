@@ -1,0 +1,27 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- Central package management: every version lives in this one file -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- RS0030: any use of a symbol listed in BannedSymbols.txt is a build error, in every project -->
+    <GlobalPackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.3.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Benchmarks only -->
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
+    <!-- API authentication -->
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.8" />
+    <!-- Test host -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <!-- PostgreSQL driver; no EF Core, as the design specifies -->
+    <PackageVersion Include="Npgsql" Version="10.0.3" />
+    <!-- Test framework and its runner -->
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+  </ItemGroup>
+
+</Project>

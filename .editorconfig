@@ -1,0 +1,97 @@
+root = true
+
+# Every file: UTF-8, LF, final newline, no trailing whitespace
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# Project, props and YAML files use two-space indentation
+[*.{csproj,props,targets,xml,yml,yaml,json}]
+indent_size = 2
+
+[*.cs]
+# Allman braces, as in dotnet/runtime
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+
+# File-scoped namespaces
+csharp_style_namespace_declarations = file_scoped:suggestion
+
+# 'var' only when the type is obvious from the right-hand side, as in dotnet/runtime
+csharp_style_var_for_built_in_types = false:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = false:suggestion
+
+# Usings outside the namespace, System first
+dotnet_sort_system_directives_first = true
+csharp_using_directive_placement = outside_namespace:suggestion
+
+# Accessibility modifiers always written
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
+
+# Naming: dotnet/runtime conventions
+# Constants are PascalCase
+dotnet_naming_rule.constants_pascal.symbols = constants
+dotnet_naming_rule.constants_pascal.style = pascal_style
+dotnet_naming_rule.constants_pascal.severity = suggestion
+dotnet_naming_symbols.constants.applicable_kinds = field, local
+dotnet_naming_symbols.constants.required_modifiers = const
+dotnet_naming_style.pascal_style.capitalization = pascal_case
+
+# Private and internal static fields are s_camelCase
+dotnet_naming_rule.static_fields_s.symbols = static_fields
+dotnet_naming_rule.static_fields_s.style = static_prefix_style
+dotnet_naming_rule.static_fields_s.severity = suggestion
+dotnet_naming_symbols.static_fields.applicable_kinds = field
+dotnet_naming_symbols.static_fields.applicable_accessibilities = private, internal
+dotnet_naming_symbols.static_fields.required_modifiers = static
+dotnet_naming_style.static_prefix_style.required_prefix = s_
+dotnet_naming_style.static_prefix_style.capitalization = camel_case
+
+# Private and internal instance fields are _camelCase
+dotnet_naming_rule.instance_fields_underscore.symbols = instance_fields
+dotnet_naming_rule.instance_fields_underscore.style = instance_prefix_style
+dotnet_naming_rule.instance_fields_underscore.severity = suggestion
+dotnet_naming_symbols.instance_fields.applicable_kinds = field
+dotnet_naming_symbols.instance_fields.applicable_accessibilities = private, internal
+dotnet_naming_style.instance_prefix_style.required_prefix = _
+dotnet_naming_style.instance_prefix_style.capitalization = camel_case
+
+# Banned APIs are errors whatever the global warning policy says
+dotnet_diagnostic.RS0030.severity = error
+
+# Culture-sensitive formatting is the root of finding F5: keep it visible
+dotnet_diagnostic.CA1305.severity = warning
+
+# Intentional design choices, documented where they occur
+# CA1028: ValueTag is a byte enum on purpose (one byte per stored attribute)
+dotnet_diagnostic.CA1028.severity = none
+# CA1034: nested Builder types mirror ImmutableArray<T>.Builder in the BCL
+dotnet_diagnostic.CA1034.severity = none
+# CA1303: exception messages are not localized in this code base
+dotnet_diagnostic.CA1303.severity = none
+# CA1716: 'Catalog' and similar names are not reserved in any .NET language this repo targets
+dotnet_diagnostic.CA1716.severity = none
+# CA1720: identifiers such as FromInt64 and TryGetUInt32 name a value kind on purpose
+dotnet_diagnostic.CA1720.severity = none
+
+# Test and benchmark code relaxations
+[{tests,benchmarks}/**.cs]
+# CA1707: underscores make test names readable
+dotnet_diagnostic.CA1707.severity = none
+# CA2007: test code has no SynchronizationContext concerns
+dotnet_diagnostic.CA2007.severity = none
+# CA5394: seeded System.Random is the point of a reproducible test
+dotnet_diagnostic.CA5394.severity = none
+# CA1515: xUnit and BenchmarkDotNet require public types
+dotnet_diagnostic.CA1515.severity = none
+# CA1861: constant arrays in tests are clearer inline
+dotnet_diagnostic.CA1861.severity = none
+# CA1822: benchmark and test methods must stay instance methods
+dotnet_diagnostic.CA1822.severity = none

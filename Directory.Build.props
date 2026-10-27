@@ -1,0 +1,43 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- One target for the whole repository: .NET 10 is the current LTS, and C# 14 is its default language version -->
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Nullable reference types on everywhere; nullable warnings are errors through TreatWarningsAsErrors below -->
+    <Nullable>enable</Nullable>
+    <!-- Implicit usings cover System, System.Linq, System.Collections.Generic and friends; other namespaces are imported explicitly per file -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Layer 0: stated explicitly so any per-project override shows up as a reviewable diff -->
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <!-- Compiler, nullable, NuGet and banned-API (RS0030) warnings all fail the build -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- The curated CA rule set; tighten to latest-all once the code base is clean against it -->
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <!-- CA findings report as warnings for now, so a single noisy rule cannot hide a real compile error in CI -->
+    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+    <!-- IDE style rules run on the command line too, at the severities set in .editorconfig -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <!-- Low and moderate advisories warn; high and critical (NU1903, NU1904) still fail the build -->
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);NU1901;NU1902</WarningsNotAsErrors>
+    <!-- Byte-identical outputs for identical inputs -->
+    <Deterministic>true</Deterministic>
+    <!-- Nothing here is published as a package yet -->
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <!-- Debug and test builds run with checked arithmetic; Release keeps the BCL's explicit-check style -->
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <!-- Normalizes source paths in PDBs for reproducible CI builds -->
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- One banned-API list for every project; the analyzer itself comes from Directory.Packages.props -->
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)BannedSymbols.txt" />
+  </ItemGroup>
+
+</Project>
