@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Types live in the Succinct namespace; the assembly name stays Succinct.Core -->
+    <RootNamespace>Succinct</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Tests may exercise internal helpers such as BitPacking directly -->
+    <InternalsVisibleTo Include="Succinct.Core.Tests" />
+  </ItemGroup>
+
+</Project>
