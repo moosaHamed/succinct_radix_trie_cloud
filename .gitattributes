@@ -1,0 +1,9 @@
+# Normalize line endings in the repository; check out with the platform's native endings
+* text=auto
+
+# C# and project files always use LF in the repository, matching dotnet/runtime
+*.cs text eol=lf
+*.csproj text eol=lf
+*.props text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
