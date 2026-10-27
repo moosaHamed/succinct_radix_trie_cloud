@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Async I/O shell over PostgreSQL; everything below it stays synchronous -->
+    <RootNamespace>Succinct.Catalog.Data</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Raw Npgsql, no EF Core: the reader fills typed values directly -->
+    <PackageReference Include="Npgsql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Produces ProductDelta values for the domain layer to merge -->
+    <ProjectReference Include="..\Succinct.Catalog\Succinct.Catalog.csproj" />
+  </ItemGroup>
+
+</Project>

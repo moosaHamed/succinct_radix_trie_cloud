@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <!-- Minimal API over the in-memory catalog -->
+    <RootNamespace>Succinct.Catalog.Api</RootNamespace>
+    <!-- Lets 'dotnet user-jwts' store development signing keys outside the repository -->
+    <UserSecretsId>succinct-catalog-api</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Bearer-token authentication backs the deny-by-default fallback policy -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Succinct.Catalog\Succinct.Catalog.csproj" />
+    <ProjectReference Include="..\Succinct.Catalog.Data\Succinct.Catalog.Data.csproj" />
+  </ItemGroup>
+
+</Project>
